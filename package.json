@@ -39,6 +39,6 @@
     "exceljs": "^4.3.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix && jest --env=node --colors --coverage test"
   }
 }
