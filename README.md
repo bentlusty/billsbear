@@ -2,5 +2,5 @@
 
 ## How to start your project locally
 ```bash
-npx ts-node index.ts
+npx ts-node src/app.ts
 ```
