@@ -1,31 +1,51 @@
-import Excel, { Row, Worksheet } from 'exceljs';
 import { IBillRepository } from '../domain/bills-repository';
 import { Bill } from '../domain/bill';
+import { NullParseExcel, ParseExcel, Row } from './parse-excel';
+
+
 
 export class BillsRepository implements IBillRepository {
-    async get(path: string): Promise<Bill[]> {
-        const result: Bill[] = [];
-        const workbook = new Excel.Workbook();
-        await workbook.xlsx.readFile(path);
-        workbook.eachSheet((worksheet: Worksheet) => {
-            const rows = worksheet.getRows(33, worksheet.rowCount);
-            rows?.forEach((row: Row) => {
-                if (BillsRepository._validate(row)) {
-                    const name = String(row.getCell(4)) as string;
-                    const referenceDate = row.getCell(3).value as Date;
-                    const amount = row.getCell(5).value as number;
-                    result.push({
-                        name,
-                        referenceDate,
-                        amount,
-                    });
-                }
-            });
-        });
-        return result;
+    private excelParser: ParseExcel;
+
+    static create(): BillsRepository {
+        const excelParser = new ParseExcel()
+        return new BillsRepository(excelParser);
     }
 
-    private static _validate(row: Row): boolean {
-        return row.cellCount >= 13 && String(row.getCell(1).value) !== 'שם כרטיס';
+    static createNull(rows: Row[] = []): BillsRepository {
+        const excelParser = new NullParseExcel(rows)
+        return new BillsRepository(excelParser);
+    }
+
+    constructor(excelParser: ParseExcel) {
+        this.excelParser = excelParser;
+    }
+
+    async get(path: string): Promise<Bill[]> {
+        const rows = await this.excelParser.getRows(path)
+        return BillsRepository.extractBills(rows);
+    }
+
+    private static extractBills(rows: Row[]): Bill[] {
+        return rows.map(BillsRepository.mapBills).filter((bill) => bill) as Bill[];
+    }
+
+    private static mapBills(row: Row): Bill | undefined {
+        if (BillsRepository.validate(row)) {
+            const name = String(row.cells[4]) as string;
+            const referenceDate = row.cells[3] as Date;
+            const amount = row.cells[5] as number;
+            return {
+                name,
+                referenceDate,
+                amount,
+            } as Bill;
+        }
+    }
+
+    private static validate(row: Row): boolean {
+        return row.cellCount >= 13 && String(row.cells[1]) !== 'שם כרטיס';
     }
 }
+
+
