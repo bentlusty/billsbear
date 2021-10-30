@@ -10,6 +10,10 @@
     "build": "tsc",
     "clean": "rimraf dist/*",
     "test": "jest --env=node test",
+    "test::watch": "jest --env=node --watch test",
+    "test::watch::unit": "jest --env=node --watch /tests/unit",
+    "test::watch::integration": "jest --env=node --watch /tests/integration",
+    "test::watch::e2e": "jest --env=node --watch /tests/e2e",
     "test::coverage": "jest --env=node --colors --coverage test",
     "lint": "eslint  . --ext .js,.jsx,.ts,.tsx --fix",
     "prepare": "husky install"
