@@ -1,6 +1,6 @@
 import path from 'path';
 import childProcess, { ForkOptions } from 'child_process';
-import CommandLine from '../../../src/infra/command-line';
+import CommandLine from '../../src/infra/command-line';
 
 describe('CommandLine', () => {
     it('writes output', async () => {
@@ -16,14 +16,6 @@ describe('CommandLine', () => {
         it("doesn't write output to command line", async () => {
             const stdout = await runModuleAsync('./_command_line_test_null_output_runner.ts');
             expect(stdout).toEqual('');
-        });
-        it('defaults to no arguments', function () {
-            const commandLine = CommandLine.createNull();
-            expect(commandLine.args()).toEqual([]);
-        });
-        it('allows arguments to be configured', function () {
-            const commandLine = CommandLine.createNull(['one', 'two']);
-            expect(commandLine.args()).toEqual(['one', 'two']);
         });
     });
 });

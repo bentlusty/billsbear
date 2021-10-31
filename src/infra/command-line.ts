@@ -5,6 +5,7 @@ interface Process {
 
 export default class CommandLine {
     private process: Process;
+    private lastOutput?: string;
 
     static create(): CommandLine {
         return new CommandLine(process);
@@ -20,6 +21,11 @@ export default class CommandLine {
 
     writeOutput(text: string): void {
         this.process.stdout.write(text + '\n');
+        this.lastOutput = text
+    }
+
+    getLastOutput():string|undefined {
+        return this.lastOutput
     }
 
     args(): string[] {

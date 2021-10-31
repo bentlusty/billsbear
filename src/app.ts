@@ -1,7 +1,23 @@
 import CommandLine from './infra/command-line';
 import { BillsRepository } from './infra/bills-repository';
 
-const commandLine = new CommandLine();
-const bills_repo = new BillsRepository();
-const path = commandLine.args()[0];
-bills_repo.get(path).then((bills) => commandLine.writeOutput(JSON.stringify(bills)));
+export default class App {
+    private commandLine: CommandLine;
+    private billsRepository: BillsRepository;
+
+    constructor(commandLine: CommandLine, billsRepository: BillsRepository) {
+        this.commandLine = commandLine;
+        this.billsRepository = billsRepository;
+    }
+
+    static create(commandLine: CommandLine, bills_repo: BillsRepository): App {
+        return new App(commandLine, bills_repo);
+    }
+
+    async run() {
+        const args = this.commandLine.args();
+        const input = args[0];
+        const output = await this.billsRepository.get(input);
+        this.commandLine.writeOutput(JSON.stringify(output));
+    }
+}

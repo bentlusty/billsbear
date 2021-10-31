@@ -1,4 +1,4 @@
-import CommandLine from '../../../src/infra/command-line';
+import CommandLine from '../../src/infra/command-line';
 
 const commandLine = CommandLine.create();
 
