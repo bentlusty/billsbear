@@ -18,6 +18,11 @@ export default class App {
         const args = this.commandLine.args();
         const input = args[0];
         const output = await this.billsRepository.get(input);
-        this.commandLine.writeOutput(JSON.stringify(output));
+        this.commandLine.writeOutput(JSON.stringify(output, null, 2));
     }
 }
+
+App.create(CommandLine.create(), Bills.create())
+    .run()
+    .then((result) => console.log(result))
+    .catch((err) => console.log(err));

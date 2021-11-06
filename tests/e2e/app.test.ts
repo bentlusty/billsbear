@@ -10,8 +10,24 @@ describe('App', () => {
         const app = App.create(commandLine, billsRepository);
         await app.run();
         const lastOutput = commandLine.getLastOutput();
-        expect(lastOutput).toContain(
-            '[{"name":"Insurance","referenceDate":"2021-10-06T00:00:00.000Z","amount":1200.83},{"name":"Water bottle","referenceDate":"2020-12-16T00:00:00.000Z","amount":100},{"name":"NETFLIX.COM","referenceDate":"2021-10-19T00:00:00.000Z","amount":60.9}]',
-        );
+        const expectedResult =
+            '[\n' +
+            '  {\n' +
+            '    "name": "Insurance",\n' +
+            '    "referenceDate": "2021-10-06T00:00:00.000Z",\n' +
+            '    "amount": 1200.83\n' +
+            '  },\n' +
+            '  {\n' +
+            '    "name": "Water bottle",\n' +
+            '    "referenceDate": "2020-12-16T00:00:00.000Z",\n' +
+            '    "amount": 100\n' +
+            '  },\n' +
+            '  {\n' +
+            '    "name": "NETFLIX.COM",\n' +
+            '    "referenceDate": "2021-10-19T00:00:00.000Z",\n' +
+            '    "amount": 60.9\n' +
+            '  }\n' +
+            ']';
+        expect(lastOutput).toEqual(expectedResult);
     });
 });
