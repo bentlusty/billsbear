@@ -1,20 +1,18 @@
-import { IBillRepository } from '../domain/bills-repository';
+import { IBills } from '../domain/bills';
 import { Bill } from '../domain/bill';
 import { NullParseExcel, ParseExcel, Row } from './parse-excel';
 
-
-
-export class BillsRepository implements IBillRepository {
+export class Bills implements IBills {
     private excelParser: ParseExcel;
 
-    static create(): BillsRepository {
-        const excelParser = new ParseExcel()
-        return new BillsRepository(excelParser);
+    static create(): Bills {
+        const excelParser = new ParseExcel();
+        return new Bills(excelParser);
     }
 
-    static createNull(rows: Row[] = []): BillsRepository {
-        const excelParser = new NullParseExcel(rows)
-        return new BillsRepository(excelParser);
+    static createNull(rows: Row[] = []): Bills {
+        const excelParser = new NullParseExcel(rows);
+        return new Bills(excelParser);
     }
 
     constructor(excelParser: ParseExcel) {
@@ -22,16 +20,16 @@ export class BillsRepository implements IBillRepository {
     }
 
     async get(path: string): Promise<Bill[]> {
-        const rows = await this.excelParser.getRows(path)
-        return BillsRepository.extractBills(rows);
+        const rows = await this.excelParser.getRows(path);
+        return Bills.extractBills(rows);
     }
 
     private static extractBills(rows: Row[]): Bill[] {
-        return rows.map(BillsRepository.mapBills).filter((bill) => bill) as Bill[];
+        return rows.map(Bills.mapBills).filter((bill) => bill) as Bill[];
     }
 
     private static mapBills(row: Row): Bill | undefined {
-        if (BillsRepository.validate(row)) {
+        if (Bills.validate(row)) {
             const name = String(row.cells[4]) as string;
             const referenceDate = row.cells[3] as Date;
             const amount = row.cells[5] as number;
@@ -47,5 +45,3 @@ export class BillsRepository implements IBillRepository {
         return row.cellCount >= 13 && String(row.cells[1]) !== 'שם כרטיס';
     }
 }
-
-

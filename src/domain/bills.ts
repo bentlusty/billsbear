@@ -1,5 +1,5 @@
 import { Bill } from './bill';
 
-export interface IBillRepository {
+export interface IBills {
     get: (path: string) => Promise<Bill[]>;
 }

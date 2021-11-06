@@ -1,14 +1,14 @@
-import { BillsRepository } from '../../src/infra/bills-repository';
+import { Bills } from '../../src/infra/bills';
 
 describe('BillRepository', () => {
     describe('Nullability', () => {
         it('default to empty bills', async () => {
-            const repository = BillsRepository.createNull();
-            const result = await repository.get('path/to/nowhere');
+            const bills = Bills.createNull();
+            const result = await bills.get('path/to/nowhere');
             expect(result).toEqual([]);
         });
         it('allows bills to be configured', async () => {
-            const repository = BillsRepository.createNull([
+            const bills = Bills.createNull([
                 {
                     cells: [null, null, null, new Date('2021-10-06'), 'Bill 1', 100.0],
                     cellCount: 14,
@@ -18,7 +18,7 @@ describe('BillRepository', () => {
                     cellCount: 14,
                 },
             ]);
-            const result = await repository.get('path/to/nowhere');
+            const result = await bills.get('path/to/nowhere');
             expect(result).toEqual([
                 {
                     name: 'Bill 1',

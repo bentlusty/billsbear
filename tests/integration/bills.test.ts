@@ -1,10 +1,10 @@
 import { Bill } from '../../src/domain/bill';
-import { BillsRepository } from '../../src/infra/bills-repository';
+import { Bills } from '../../src/infra/bills';
 
-describe('BillRepository', () => {
+describe('Bill', () => {
     it('parse bank hapoalim excel', async () => {
-        const repository = BillsRepository.create();
-        const bills = await repository.get('tests/integration/bank_hapoalim.xlsx');
+        const bills = Bills.create();
+        const result = await bills.get('tests/integration/bank_hapoalim.xlsx');
         const expectedResult: Bill[] = [
             {
                 name: 'Insurance',
@@ -22,6 +22,6 @@ describe('BillRepository', () => {
                 amount: 60.9,
             },
         ];
-        expect(bills).toEqual(expectedResult);
+        expect(result).toEqual(expectedResult);
     });
 });
